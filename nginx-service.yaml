@@ -1,0 +1,20 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: httpnginx
+  annotations:
+   service.beta.kubernetes.io/aws-load-balancer-ssl-cert: <update-me-with-certificate-arn>
+   service.beta.kubernetes.io/aws-load-balancer-backend-protocol: http
+   service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout: '3600'
+   service.beta.kubernetes.io/aws-load-balancer-internal: 0.0.0.0/0
+spec:
+  loadBalancerSourceRanges:
+  - 10.8.0.0/16 # IP address range where you are going to access this loadbalancer
+  ports:
+  - name: https
+    port: 443
+    targetPort: 80
+    protocol: TCP
+  selector:
+    app: nginx
+  type: LoadBalancer
